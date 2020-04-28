@@ -62,45 +62,97 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 
 	@Override
 	public String toString() {
-		// TODO RECURSIVO
+
 		//	Construye y devuelve con el formato adecuado "(A B C )" 
-		
-		return null;
+
+		return toStringRec(front);
 	}
 	
+	private String toStringRec(Node<T> nodo) {
+		
+		if(nodo == null)
+			return "";
+		
+		return nodo.elem.toString()+" "+toStringRec(nodo.next);
+	}
 	
 	@Override
 	public boolean contains(T target) {
-		// TODO RECURSIVO
 		
+		if(target == null)
+			throw new NullPointerException();
 		
-		return false;
+		return containsRec(front, target);
 	}
-
 	
-  @Override
+	private boolean containsRec(Node<T> nodo, T target) {
+		
+		if(nodo == null)
+			return false;
+		if(nodo.elem.equals(target))
+			return true;
+		
+		return containsRec(nodo.next, target);
+	}
+	
+	@Override
 	public int count(T element) {
-	// TODO RECURSIVO
-	  return 0;
+		
+		
+	  return countRec(front, element);
 		
 	}
-
+	
+	private int countRec(Node<T> nodo, T element) {
+		
+		int num = 0;
+		
+		if(nodo == null)
+			return 0;
+		if(nodo.elem.equals(element))
+			num = 1;
+		
+		return countRec(nodo.next, element)+num;
+	}
 
 	@Override
 	public T getLast() throws EmptyCollectionException {
-		// TODO RECURSIVO
 		
-		return null;
+		if(this.front == null)
+			throw new EmptyCollectionException("vacia");
+		
+		return getLastRec(front);
+	}
+	
+	private T getLastRec(Node<T> nodo) {
+		
+		if(nodo.next == null)
+			return nodo.elem;
+		else
+			return getLastRec(nodo.next);
 	}
 
 
 	
 	@Override
 	public boolean isOrdered() {
-     // TODO RECURSIVO
-		return false;
+     
+		return isOrdererRec(this.front);
+		
 	}
-
+	
+	
+	private boolean isOrdererRec(Node<T> nodo) {
+		
+		if(nodo==null || nodo.next == null)
+			return true;
+		
+		
+		if(((Comparable<T>)nodo.elem).compareTo(nodo.next.elem) >=0) 
+			return false;
+		
+		return isOrdererRec(nodo.next);
+	}
 	
 	@Override
 	public T remove(T element) throws EmptyCollectionException {
