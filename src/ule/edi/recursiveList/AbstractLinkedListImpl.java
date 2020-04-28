@@ -65,7 +65,7 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 
 		//	Construye y devuelve con el formato adecuado "(A B C )" 
 
-		return toStringRec(front);
+		return "("+toStringRec(front)+")";
 	}
 	
 	private String toStringRec(Node<T> nodo) {
@@ -118,7 +118,7 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	@Override
 	public T getLast() throws EmptyCollectionException {
 		
-		if(this.front == null)
+		if(this.isEmpty())
 			throw new EmptyCollectionException("vacia");
 		
 		return getLastRec(front);
@@ -156,52 +156,160 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	
 	@Override
 	public T remove(T element) throws EmptyCollectionException {
-    // TODO RECURSIVO
-		return null;
 		
+		if(element == null)
+			throw new NullPointerException();
+		if(this.isEmpty())
+			throw new EmptyCollectionException("vacio");
+		
+		//Si el nodo es el 1
+		if(front.elem.equals(element)) {
+			T elemento = front.elem;
+			front = null;
+			return elemento;
+		}
+			
+		T eliminado = removeRec(front, element);
+
+		if(eliminado == null)
+			throw new NoSuchElementException();
+		
+		return eliminado;
+		
+	}
+	
+	private T removeRec(Node<T> nodo, T element) {
+		
+		//Si es el ultimo
+		if(nodo.next==null) 
+			return null;
+			
+		//Si esta en el medio
+		if(nodo.next.elem.equals(element)) {
+			T elemento = nodo.next.elem;
+			nodo.next = nodo.next.next;
+			return elemento;
+		}
+		
+		return removeRec(nodo.next, element);
 	}
 
 
 	@Override
 	public T removeLast(T element) throws EmptyCollectionException {
-     // TODO RECURSIVO
-		return null;
+		
+		if(element == null) 
+			throw new NullPointerException();
+		if(this.isEmpty())
+			throw new EmptyCollectionException("vacia");
+		
+		T elementoEliminado = null;
+		//Si el ultimo elemento es el primero
+		if(front.elem.equals(element))
+			elementoEliminado = removeLastRec(front, front, element);
+		
+		elementoEliminado = removeLastRec(front, null, element);
+		
+		if(elementoEliminado == null)
+			throw new NoSuchElementException();
+		
+		return elementoEliminado;
+	}
+	
+	private T removeLastRec(Node<T> nodo, Node<T> anteriorAUltimaAparicion, T element ) {
+		
+		
+		if(nodo == null && anteriorAUltimaAparicion == null)
+			return null;
+		
+		if(nodo == null) {
+			T elemento;
+			
+			//Si el elemento es el primero
+			if(anteriorAUltimaAparicion == front) {
+				elemento = anteriorAUltimaAparicion.elem;
+				front = front.next;
+			}else { //Si esta en el medio
+				elemento = anteriorAUltimaAparicion.next.elem;
+				anteriorAUltimaAparicion.next = anteriorAUltimaAparicion.next.next;
+			}
+			
+			return elemento;
+		}
+		
+		if(nodo.next.elem.equals(element))
+			return removeLastRec(nodo.next, nodo, element);
+		
+		return removeLastRec(nodo.next, anteriorAUltimaAparicion, element);
 	}
 
 
 	@Override
 	public boolean isEmpty() {
-		// TODO 
-		return false;
+		return this.front==null;
 	}
 
 	@Override
 	public int size() {
-		// TODO RECURSIVO
-		return 0;
+		return sizeRec(front);
+	}
+	
+	private int sizeRec(Node<T> nodo) {
+		
+		if(nodo == null)
+			return 0;
+		
+		return sizeRec(nodo.next)+1;
 	}
 
 	@Override
 	public T getFirst() throws EmptyCollectionException {
-		// TODO RECURSIVO
-		return null;
+		
+		if(this.isEmpty())
+			throw new EmptyCollectionException("vacio");
+		
+		return front.elem;
 	}
 
 	@Override
 	public String toStringFromUntil(int from, int until) {
-		// TODO RECURSIVO
 		
-		return null;
+		if(from>size())
+			return "()";
+		
+		if(until>size())
+			until = size();
+		
+		return "("+toStringFromUntilRec(from, until, front, 1)+")";
 		
 	}
-
+	private String toStringFromUntilRec(int from, int until, Node<T> nodo, int posicion) {
+		
+		if(nodo == null || posicion > until)
+			return "";
+		
+		if(posicion < from)
+			return toStringFromUntilRec(from, until, nodo.next, posicion++);
+		
+		return nodo.elem.toString()+" "+toStringFromUntilRec(from, until, nodo.next, posicion++);
+	}
 
 	@Override
 	public String toStringReverse() {
-		// TODO RECURSIVE
-		return null;
+		
+		return "("+toStringReverseRec(front)+")";
 	}
 	
+	private String toStringReverseRec(Node<T> nodo) {
+		
+		
+		if(nodo==front)
+			return toStringRec(nodo.next)+" "+nodo.elem.toString()+" ";
+		if(nodo.next == null)
+			return nodo.elem.toString();
+		
+		return toStringRec(nodo.next)+" "+nodo.elem.toString();
+	}
 
 	@Override
 	public int removeDuplicates() {
