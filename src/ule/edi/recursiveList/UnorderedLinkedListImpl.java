@@ -10,7 +10,7 @@ public class UnorderedLinkedListImpl<T> extends AbstractLinkedListImpl<T> implem
 	}
 	
 	public UnorderedLinkedListImpl(T ... v) {
-		//	AÃ±adir en el mismo orden que en 'v'
+		//	Añadir en el mismo orden que en 'v'
 		for (T Vi : v) {
 			addLast(Vi);
 		}

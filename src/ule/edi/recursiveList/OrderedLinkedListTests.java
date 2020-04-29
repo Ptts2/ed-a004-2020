@@ -46,7 +46,7 @@ public class OrderedLinkedListTests {
 
 	// Tests removeDuplicates en ordenada
 	@Test
-	public void testRemoveDuplicates() {
+	public void testRemoveDuplicates() throws EmptyCollectionException{
 		Assert.assertEquals(lA4B2.removeDuplicates(),4); // 3 A + 1B repetidas
 		Assert.assertEquals(lA4B2.removeDuplicates(),0); // 0 repetids
 		Assert.assertEquals(lA4B2.toString(), "(A B )");	

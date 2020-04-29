@@ -4,6 +4,8 @@ package ule.edi.recursiveList;
 
 import org.junit.*;
 
+import ule.edi.exceptions.EmptyCollectionException;
+
 
 
 public class UnorderedLinkedListTests {
@@ -69,7 +71,7 @@ public class UnorderedLinkedListTests {
 // Tests eliminar duplicados
 	
    @Test
-	public void testRemoveDuplicates() {
+	public void testRemoveDuplicates() throws EmptyCollectionException{
 	    UnorderedLinkedListImpl<String> lista=new UnorderedLinkedListImpl<String>("A", "A", "B", "C", "B", "A", "C"); 
 		Assert.assertEquals(lista.removeDuplicates(),4); 
 		Assert.assertEquals(lista.toString(), "(A B C )");

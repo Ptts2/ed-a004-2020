@@ -312,9 +312,12 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	}
 
 	@Override
-	public int removeDuplicates() {
+	public int removeDuplicates() throws EmptyCollectionException{
 		// TODO RECURSIVE
 		// Implementar teniendo en cuenta que la lista está desordenada
+		
+		if(isEmpty())
+			throw new EmptyCollectionException("vacia");
 		return 0;
 	
 	}

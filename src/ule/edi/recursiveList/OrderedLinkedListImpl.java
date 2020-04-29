@@ -1,5 +1,7 @@
 package ule.edi.recursiveList;
 
+import ule.edi.exceptions.EmptyCollectionException;
+
 public class OrderedLinkedListImpl<T extends Comparable<? super T>> extends
 		AbstractLinkedListImpl<T> implements OrderedListADT<T> {
 
@@ -55,13 +57,29 @@ public class OrderedLinkedListImpl<T extends Comparable<? super T>> extends
 	
 
 	@Override
-	public int removeDuplicates() {
-  // TODO RECURSIVE 
-  // Redefinir para listas ordenadas (los duplicados estarán consecutivos)
+	public int removeDuplicates() throws EmptyCollectionException{
+		// TODO RECURSIVE 
+		// Redefinir para listas ordenadas (los duplicados estaran consecutivos)
+		
+		if(isEmpty())
+			throw new EmptyCollectionException("vacia");
+		
+		
+		return removeDuplicatesRec(front, 0);
+	}
 	
-    return 0;
+	private int removeDuplicatesRec(Node<T> nodo, int duplicados) {
+		
+		if(nodo.next == null)
+			return duplicados;
+		
+		if(nodo.next.elem.equals(nodo.elem)) {
+			nodo.next = nodo.next.next;
+			return removeDuplicatesRec(nodo, duplicados+1);
 		}
-
+		
+		return removeDuplicatesRec(nodo.next, duplicados);
+	}
 	
 	
 
