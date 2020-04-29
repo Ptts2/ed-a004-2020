@@ -32,20 +32,30 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	}
 	
 	private class IteratorImpl implements Iterator<T> {
-     // TODO Implementar el iterador normal
+		
+		Node<T> actual;
+		
+		public IteratorImpl(Node<T> nodo) {
+			
+			this.actual = nodo;
+		}
 		
 		@Override
 		public boolean hasNext() {
 
-		return false;
+			return actual!=null;
 		}
 
 		@Override
 		public T next() {
 
+			if(!this.hasNext()) 
+				throw new NoSuchElementException();
 			
-
-			return null;
+			
+			T elemento = actual.elem;
+			actual = actual.next;
+			return elemento;
 		}
 
 		@Override
@@ -297,18 +307,19 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	@Override
 	public String toStringReverse() {
 		
-		return "("+toStringReverseRec(front)+")";
+		String salida ="("+toStringReverseRec(front).trim()+" )";
+		
+		return salida;
 	}
 	
 	private String toStringReverseRec(Node<T> nodo) {
 		
 		
-		if(nodo==front)
-			return toStringRec(nodo.next)+" "+nodo.elem.toString()+" ";
-		if(nodo.next == null)
-			return nodo.elem.toString();
+		if(nodo==null)
+			return "";
 		
-		return toStringRec(nodo.next)+" "+nodo.elem.toString();
+		return toStringReverseRec(nodo.next)+" "+nodo.elem.toString();
+		
 	}
 
 	@Override
@@ -318,15 +329,37 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 		
 		if(isEmpty())
 			throw new EmptyCollectionException("vacia");
-		return 0;
+		
+		return removeDuplicatesRec2(front);
 	
+	}
+	private int removeDuplicatesRec2(Node<T> nodo) {
+		
+		
+		if(nodo == null)
+			return 0;
+		
+		return removeDuplicateRec3(nodo, nodo.elem)+removeDuplicatesRec2(nodo.next);
+
+	}
+	private int removeDuplicateRec3(Node<T> nodo, T target) {
+		
+		if(nodo == null || nodo.next == null)
+			return 0;
+		
+		if(nodo.next.elem.equals(target)) {
+			
+			nodo.next = nodo.next.next;
+			return 1+removeDuplicateRec3(nodo.next, target);
+		}
+		
+		return 0+removeDuplicateRec3(nodo.next, target);
 	}
 
 	
 	@Override
 	public Iterator<T> iterator() {
-		// TODO 
-		return null;
+		return new IteratorImpl(this.front);
 	}
 
 
