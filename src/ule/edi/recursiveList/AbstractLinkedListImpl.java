@@ -147,8 +147,10 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	@Override
 	public boolean isOrdered() {
      
-		return isOrdererRec(this.front);
+		if(this.isEmpty())
+			return true;
 		
+		return isOrdererRec(this.front);
 	}
 	
 	
@@ -158,7 +160,7 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 			return true;
 		
 		
-		if(((Comparable<T>)nodo.elem).compareTo(nodo.next.elem) >=0) 
+		if((( Comparable<T> )nodo.elem).compareTo(nodo.next.elem) >=0) 
 			return false;
 		
 		return isOrdererRec(nodo.next);
