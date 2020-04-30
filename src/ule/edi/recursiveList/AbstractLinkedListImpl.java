@@ -156,11 +156,10 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	
 	private boolean isOrdererRec(Node<T> nodo) {
 		
-		if(nodo==null || nodo.next == null)
+		if(nodo.next == null)
 			return true;
-		
-		
-		if((( Comparable<T> )nodo.elem).compareTo(nodo.next.elem) >=0) 
+		  
+		if((( Comparable<T> )nodo.elem).compareTo(nodo.next.elem) >0) 
 			return false;
 		
 		return isOrdererRec(nodo.next);
