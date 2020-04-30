@@ -108,9 +108,7 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	@Override
 	public int count(T element) {
 		
-		
 	  return countRec(front, element);
-		
 	}
 	
 	private int countRec(Node<T> nodo, T element) {
@@ -150,11 +148,11 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 		if(this.isEmpty())
 			return true;
 		
-		return isOrdererRec(this.front);
+		return isOrderedRec(this.front);
 	}
 	
 	
-	private boolean isOrdererRec(Node<T> nodo) {
+	private boolean isOrderedRec(Node<T> nodo) {
 		
 		if(nodo.next == null)
 			return true;
@@ -162,7 +160,7 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 		if((( Comparable<T> )nodo.elem).compareTo(nodo.next.elem) >0) 
 			return false;
 		
-		return isOrdererRec(nodo.next);
+		return isOrderedRec(nodo.next);
 	}
 	
 	@Override
@@ -176,7 +174,7 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 		//Si el nodo es el 1
 		if(front.elem.equals(element)) {
 			T elemento = front.elem;
-			front = null;
+			front = front.next;
 			return elemento;
 		}
 			
@@ -213,45 +211,33 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 			throw new NullPointerException();
 		if(this.isEmpty())
 			throw new EmptyCollectionException("vacia");
-		
-		T elementoEliminado = null;
-		//Si el ultimo elemento es el primero
-		if(front.elem.equals(element))
-			elementoEliminado = removeLastRec(front, front, element);
-		
-		elementoEliminado = removeLastRec(front, null, element);
-		
-		if(elementoEliminado == null)
+		if(!this.contains(element))
 			throw new NoSuchElementException();
 		
-		return elementoEliminado;
+		Node<T> anteriorAUltimaAparicion = removeLastRec(front, null, element);
+		
+		if(anteriorAUltimaAparicion == null)
+			return remove(element);
+		
+		
+		T elemento = anteriorAUltimaAparicion.elem;
+		anteriorAUltimaAparicion.next = anteriorAUltimaAparicion.next.next;
+		
+		return elemento;
+		
+		
 	}
 	
-	private T removeLastRec(Node<T> nodo, Node<T> anteriorAUltimaAparicion, T element ) {
+	private Node<T> removeLastRec(Node<T> nodo, Node<T> anteriorAUltimaAparicion, T element ) {
 		
-		
-		if(nodo == null && anteriorAUltimaAparicion == null)
-			return null;
-		
-		if(nodo == null) {
-			T elemento;
-			
-			//Si el elemento es el primero
-			if(anteriorAUltimaAparicion == front) {
-				elemento = anteriorAUltimaAparicion.elem;
-				front = front.next;
-			}else { //Si esta en el medio
-				elemento = anteriorAUltimaAparicion.next.elem;
-				anteriorAUltimaAparicion.next = anteriorAUltimaAparicion.next.next;
-			}
-			
-			return elemento;
-		}
+		if(nodo.next == null)
+			return anteriorAUltimaAparicion;
 		
 		if(nodo.next.elem.equals(element))
-			return removeLastRec(nodo.next, nodo, element);
+			return removeLastRec(nodo.next,nodo,element);
 		
 		return removeLastRec(nodo.next, anteriorAUltimaAparicion, element);
+		
 	}
 
 
@@ -285,6 +271,11 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	@Override
 	public String toStringFromUntil(int from, int until) {
 		
+		if(until<from)throw new IllegalArgumentException();	
+		if(until<=0)throw new IllegalArgumentException();
+		if(from<=0)throw new IllegalArgumentException();
+			
+		
 		if(from>size())
 			return "()";
 		
@@ -296,13 +287,15 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 	}
 	private String toStringFromUntilRec(int from, int until, Node<T> nodo, int posicion) {
 		
-		if(nodo == null || posicion > until)
+
+		if(posicion > until)
 			return "";
 		
 		if(posicion < from)
-			return toStringFromUntilRec(from, until, nodo.next, posicion++);
+			return toStringFromUntilRec(from, until, nodo.next, posicion+1);
 		
-		return nodo.elem.toString()+" "+toStringFromUntilRec(from, until, nodo.next, posicion++);
+		return nodo.elem.toString()+" "+toStringFromUntilRec(from, until, nodo.next, posicion+1);
+		
 	}
 
 	@Override
@@ -319,14 +312,13 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 		if(nodo==null)
 			return "";
 		
+		nodo.toString();
 		return toStringReverseRec(nodo.next)+" "+nodo.elem.toString();
 		
 	}
 
 	@Override
 	public int removeDuplicates() throws EmptyCollectionException{
-		// TODO RECURSIVE
-		// Implementar teniendo en cuenta que la lista está desordenada
 		
 		if(isEmpty())
 			throw new EmptyCollectionException("vacia");

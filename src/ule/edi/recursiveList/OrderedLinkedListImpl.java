@@ -19,7 +19,6 @@ public class OrderedLinkedListImpl<T extends Comparable<? super T>> extends
 	
 	@Override
 	public void add(T element) {
-		//TODO RECURSIVO
 		
 		if(element == null)
 			throw new NullPointerException();
@@ -34,8 +33,6 @@ public class OrderedLinkedListImpl<T extends Comparable<? super T>> extends
 		}else {
 			addRec(front, element);
 		}
-		
-		
 		
 	}
 	
@@ -58,7 +55,6 @@ public class OrderedLinkedListImpl<T extends Comparable<? super T>> extends
 
 	@Override
 	public int removeDuplicates() throws EmptyCollectionException{
-		// TODO RECURSIVE 
 		// Redefinir para listas ordenadas (los duplicados estaran consecutivos)
 		
 		if(isEmpty())

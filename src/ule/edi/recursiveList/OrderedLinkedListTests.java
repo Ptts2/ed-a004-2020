@@ -63,5 +63,16 @@ public class OrderedLinkedListTests {
 	
 	// AÑADIR MAS TESTS para el resto de casos especiales 
 
+	@Test(expected=NullPointerException.class)
+	public void testAddException() {
+		OrderedLinkedListImpl<String>lista = new OrderedLinkedListImpl<String>("A", "B", "A", "A", "B", "A");
+		lista.add(null);
+	}
+	
+	@Test(expected=EmptyCollectionException.class)
+	public void testRemoveDuplicatesException() throws EmptyCollectionException{
+		OrderedLinkedListImpl<String>lista = new OrderedLinkedListImpl<String>();
+		lista.removeDuplicates();
+	}
 	
 }
