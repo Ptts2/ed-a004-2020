@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import ule.edi.exceptions.EmptyCollectionException;
+import ule.edi.exceptions.TypeIsNotComparableException;
 
 public class AbstractLinkedListImpl<T> implements ListADT<T> {
 
@@ -156,9 +157,13 @@ public class AbstractLinkedListImpl<T> implements ListADT<T> {
 		
 		if(nodo.next == null)
 			return true;
-		  
+		
+		try {
 		if((( Comparable<T> )nodo.elem).compareTo(nodo.next.elem) >0) 
 			return false;
+		}catch(ClassCastException e) {
+			throw new TypeIsNotComparableException("No comparable");
+		}
 		
 		return isOrderedRec(nodo.next);
 	}

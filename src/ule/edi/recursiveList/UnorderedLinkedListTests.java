@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 import org.junit.*;
 
 import ule.edi.exceptions.EmptyCollectionException;
+import ule.edi.exceptions.TypeIsNotComparableException;
 
 
 
@@ -315,5 +316,12 @@ public class UnorderedLinkedListTests {
    public void testAddBeforeException3() {
 	   UnorderedLinkedListImpl<String> lista=new UnorderedLinkedListImpl<String>("A", "B", "C", "E", "Y", "P", "Q"); 
 	   lista.addBefore("S", "U");
+   }
+   
+   @Test(expected= TypeIsNotComparableException.class)
+   public void testIsOrderedException() {
+	   UnorderedLinkedListImpl<Object> lista=new UnorderedLinkedListImpl<Object>(new Object(), new Object()); 
+	   lista.isOrdered();
+	   
    }
 }
